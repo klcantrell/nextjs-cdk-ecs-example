@@ -15,20 +15,20 @@ export class VPCResources extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    // this.vpc = new Vpc(this, "VPC", {
-    //   subnetConfiguration: [
-    //     {
-    //       cidrMask: 24,
-    //       name: "PublicSubnet",
-    //       subnetType: SubnetType.PUBLIC,
-    //     },
-    //   ],
-    //   maxAzs: 2,
-    //   natGateways: 0,
-    // });
-    this.vpc = Vpc.fromLookup(scope, "DefaultVPC", {
-      vpcId: process.env.VPC_ID
+    this.vpc = new Vpc(this, "VPC", {
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          name: "PublicSubnet",
+          subnetType: SubnetType.PUBLIC,
+        },
+      ],
+      maxAzs: 2,
+      natGateways: 0,
     });
+    // this.vpc = Vpc.fromLookup(scope, "DefaultVPC", {
+    //   vpcId: process.env.VPC_ID
+    // });
 
     this.applicationLoadBalancerSecurityGroup = new SecurityGroup(
       this,

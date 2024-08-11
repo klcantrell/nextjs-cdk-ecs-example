@@ -27,6 +27,20 @@ export class NextAppStack extends cdk.Stack {
       randomString: randomString,
     });
 
+    const distribution = new DistributionResources(
+      this,
+      "DistributionResources",
+      {
+        applicationLoadBalancer: ecsResources.applicationLoadBalancer,
+        customHeader: customHeader,
+        randomString: randomString,
+        domainName: props.domainName,
+      }
+    );
+
+    new cdk.CfnOutput(this, "distributionDomain", {
+      value: distribution.distribution.domainName,
+    });
     // const distribution = new DistributionResources(
     //   this,
     //   "DistributionResources",

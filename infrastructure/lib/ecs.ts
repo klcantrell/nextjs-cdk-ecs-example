@@ -42,8 +42,9 @@ export class ECSResources extends Construct {
       "applicationLoadBalancer",
       {
         vpc: props.vpc,
-        // vpcSubnets: { subnetType: SubnetType.PUBLIC },
-        vpcSubnets: { subnetType: SubnetType.PRIVATE_WITH_EGRESS },
+        vpcSubnets: { subnetType: SubnetType.PUBLIC },
+        // vpcSubnets: { subnetType: SubnetType.PRIVATE_WITH_EGRESS },
+        internetFacing: true,
         // internetFacing: true,
         securityGroup: props.applicationLoadBalancerSecurityGroup,
       }
@@ -75,10 +76,11 @@ export class ECSResources extends Construct {
     this.fargateService = new FargateService(this, "nextAppFargateService", {
       cluster: cluster,
       taskDefinition: ecsTask,
+      assignPublicIp: true,
       // assignPublicIp: true,
       desiredCount: 1,
-      // vpcSubnets: { subnetType: SubnetType.PUBLIC },
-      vpcSubnets: { subnetType: SubnetType.PRIVATE_WITH_EGRESS },
+      vpcSubnets: { subnetType: SubnetType.PUBLIC },
+      // vpcSubnets: { subnetType: SubnetType.PRIVATE_WITH_EGRESS },
       securityGroups: [taskSecurityGroup],
     });
 
@@ -110,11 +112,18 @@ export class ECSResources extends Construct {
         port: 80,
         protocol: ApplicationProtocol.HTTP,
         open: true,
-        // defaultAction: ListenerAction.fixedResponse(403),
-        defaultAction: ListenerAction.forward([fargateTargetGroup]),
+        defaultAction: ListenerAction.fixedResponse(403),
+        // defaultAction: ListenerAction.forward([fargateTargetGroup]),
       }
     );
 
+    fargateListener.addAction("ForwardFromCloudFront", {
+      action: ListenerAction.forward([fargateTargetGroup]),
+      conditions: [
+        ListenerCondition.httpHeader(props.customHeader, [props.randomString]),
+      ],
+      priority: 1,
+    });
     // fargateListener.addAction("ForwardFromCloudFront", {
     //   action: ListenerAction.forward([fargateTargetGroup]),
     //   conditions: [
