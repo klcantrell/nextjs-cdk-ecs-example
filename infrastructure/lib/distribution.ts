@@ -72,7 +72,7 @@ export class DistributionResources extends Construct {
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: CachePolicy.CACHING_DISABLED,
-        allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+        allowedMethods: AllowedMethods.ALLOW_ALL,
         originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
       },
       domainNames: props.domainName ? [props.domainName] : undefined,
