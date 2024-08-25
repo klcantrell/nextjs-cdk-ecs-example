@@ -112,18 +112,11 @@ export class ECSResources extends Construct {
         port: 80,
         protocol: ApplicationProtocol.HTTP,
         open: true,
-        defaultAction: ListenerAction.fixedResponse(403),
-        // defaultAction: ListenerAction.forward([fargateTargetGroup]),
+        // defaultAction: ListenerAction.fixedResponse(403),
+        defaultAction: ListenerAction.forward([fargateTargetGroup]),
       }
     );
 
-    fargateListener.addAction("ForwardFromCloudFront", {
-      action: ListenerAction.forward([fargateTargetGroup]),
-      conditions: [
-        ListenerCondition.httpHeader(props.customHeader, [props.randomString]),
-      ],
-      priority: 1,
-    });
     // fargateListener.addAction("ForwardFromCloudFront", {
     //   action: ListenerAction.forward([fargateTargetGroup]),
     //   conditions: [

@@ -27,20 +27,10 @@ export class NextAppStack extends cdk.Stack {
       randomString: randomString,
     });
 
-    const distribution = new DistributionResources(
-      this,
-      "DistributionResources",
-      {
-        applicationLoadBalancer: ecsResources.applicationLoadBalancer,
-        customHeader: customHeader,
-        randomString: randomString,
-        domainName: props.domainName,
-      }
-    );
+    // CloudFront, even with x-accel-buffering=no response headers from origin, buffers streaming responses
+    // the Next.js app. Not finding a lot of help out there with other people trying the CloudFront + ALB setup.
+    // leaving it like this for now, going to explore OpenNext in a separate repo.
 
-    new cdk.CfnOutput(this, "distributionDomain", {
-      value: distribution.distribution.domainName,
-    });
     // const distribution = new DistributionResources(
     //   this,
     //   "DistributionResources",

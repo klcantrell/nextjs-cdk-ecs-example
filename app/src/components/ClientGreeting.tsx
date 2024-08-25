@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-export default function Greeting() {
+export default function ClientGreeting() {
   const greetingQuery = useQuery<{ message: string }>({
     queryKey: ["message"],
     queryFn: async () => {
