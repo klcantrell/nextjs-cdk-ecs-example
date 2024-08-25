@@ -6,8 +6,6 @@ import { useState } from "react";
 import { streamLoremIpsum } from "@/app/actions";
 import { useEffectOnce } from "@/utils";
 
-const DOES_THIS_APPEAR_IN_THE_BUNDLE = 'DOES_THIS_APPEAR_IN_THE_BUNDLE'
-
 export default function StreamingLoremIpsum() {
   const [message, setMessage] = useState("");
 
@@ -21,5 +19,5 @@ export default function StreamingLoremIpsum() {
     })();
   });
 
-  return <div>{DOES_THIS_APPEAR_IN_THE_BUNDLE}Data: {message}</div>;
+  return <div>Data: {message}</div>;
 }
